@@ -8,14 +8,13 @@ use Illuminate\Http\Request;
 class CityController extends Controller
 {
 
-    public function index()
-    {
+    public function index() {
+
         $cities = City::all(); 
         return response()->json($cities); 
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -28,16 +27,14 @@ class CityController extends Controller
     }
 
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
         
         $city = City::findOrFail($id);
         return response()->json($city); 
     }
 
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
         
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -53,8 +50,7 @@ class CityController extends Controller
     }
 
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
         $city = City::findOrFail($id);
 
         $city->delete();

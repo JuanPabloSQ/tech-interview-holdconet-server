@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Region; 
 use Illuminate\Http\Request;
 
-class RegionController extends Controller
-{
-    public function index()
-    {
+class RegionController extends Controller {
+    
+    public function index() {
+
         $regions = Region::all(); 
 
         return response()->json($regions); 
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
         ]);
@@ -25,15 +25,15 @@ class RegionController extends Controller
         return response()->json($region, 201);
     }
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
+
         $region = Region::findOrFail($id);
         return response()->json($region); 
     }
 
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
+
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
         ]);
@@ -46,8 +46,7 @@ class RegionController extends Controller
     }
 
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
         
         $region = Region::findOrFail($id);
 

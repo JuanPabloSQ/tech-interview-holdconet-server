@@ -5,17 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Street; 
 use Illuminate\Http\Request;
 
-class StreetController extends Controller
-{
+class StreetController extends Controller {
 
-    public function index()
-    {
+    public function index() {
+
         $streets = Street::all(); 
         return response()->json($streets); 
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -29,16 +27,14 @@ class StreetController extends Controller
     }
 
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
 
         $street = Street::findOrFail($id);
         return response()->json($street); 
     }
 
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
 
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -53,8 +49,7 @@ class StreetController extends Controller
     }
 
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
 
         $street = Street::findOrFail($id);
 
