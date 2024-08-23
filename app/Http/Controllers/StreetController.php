@@ -2,60 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Street; 
+use App\Models\Street;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
-class StreetController extends Controller {
-
-    public function index() {
-
-        $streets = Street::all(); 
-        return response()->json($streets); 
+class StreetController extends Controller
+{
+    public function index()
+    {
+        try {
+            $streets = Street::all();
+            return response()->json($streets, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error fetching streets',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'city_id' => 'required|exists:cities,id',
+            ]);
 
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'city_id' => 'required|exists:cities,id', 
-        ]);
+            $street = Street::create($validatedData);
 
-
-        $street = Street::create($validatedData);
-
-        return response()->json($street, 201);
+            return response()->json($street, 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'details' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error creating street',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
-
-    public function show(string $id) {
-
-        $street = Street::findOrFail($id);
-        return response()->json($street); 
+    public function show(string $id)
+    {
+        try {
+            $street = Street::findOrFail($id);
+            return response()->json($street, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Street not found'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error fetching street',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
+    public function update(Request $request, string $id)
+    {
+        try {
+            $validatedData = $request->validate([
+                'name' => 'sometimes|required|string|max:255',
+                'city_id' => 'sometimes|required|exists:cities,id',
+            ]);
 
-    public function update(Request $request, string $id) {
+            $street = Street::findOrFail($id);
+            $street->update($validatedData);
 
-        $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'city_id' => 'sometimes|required|exists:cities,id',
-        ]);
-
-        $street = Street::findOrFail($id);
-
-        $street->update($validatedData);
-
-        return response()->json($street);
+            return response()->json($street, 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'details' => $e->errors()
+            ], 422);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Street not found'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error updating street',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
+    public function destroy(string $id)
+    {
+        try {
+            $street = Street::findOrFail($id);
+            $street->delete();
 
-    public function destroy(string $id) {
-
-        $street = Street::findOrFail($id);
-
-
-        $street->delete();
-
-        return response()->json(null, 204);
+            return response()->json([
+                'message' => 'Street deleted successfully'
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Street not found'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error deleting street',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 }
