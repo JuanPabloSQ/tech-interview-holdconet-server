@@ -25,7 +25,6 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CorsMiddleware::class, // Asegúrate de que CORS esté en el grupo 'api'
             \App\Http\Middleware\ForceJsonResponse::class, // Añade el middleware para forzar JSON en respuestas API
         ],
     ];
