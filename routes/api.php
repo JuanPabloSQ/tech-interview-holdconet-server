@@ -7,6 +7,6 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\StreetController;
 
 Route::apiResource('regions', RegionController::class);
-Route::apiResource('provinces', ProvinceController::class);
-Route::apiResource('cities', CityController::class);
-Route::apiResource('streets', StreetController::class);
+Route::get('provinces', [ProvinceController::class, 'index']); 
+Route::get('cities', [CityController::class, 'index']);
+Route::get('streets', [StreetController::class, 'index']);

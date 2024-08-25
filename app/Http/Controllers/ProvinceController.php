@@ -7,20 +7,22 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
-class ProvinceController extends Controller
-{
-    public function index()
-    {
-        try {
+class ProvinceController extends Controller {
+
+    public function index(Request $request) {
+
+        $regionId = $request->query('region_id'); 
+        if ($regionId) {
+            $provinces = Province::where('region_id', $regionId)->get();
+        } else {
             $provinces = Province::all();
-            return response()->json($provinces);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error fetching provinces', 'details' => $e->getMessage()], 500);
         }
+    
+        return response()->json($provinces);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -37,8 +39,8 @@ class ProvinceController extends Controller
         }
     }
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
+        
         try {
             $province = Province::findOrFail($id);
             return response()->json($province);
@@ -49,8 +51,8 @@ class ProvinceController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
@@ -71,8 +73,8 @@ class ProvinceController extends Controller
         }
     }
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
+        
         try {
             $province = Province::findOrFail($id);
             $province->delete();

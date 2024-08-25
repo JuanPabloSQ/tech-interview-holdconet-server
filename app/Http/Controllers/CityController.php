@@ -7,20 +7,22 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
-class CityController extends Controller
-{
-    public function index()
-    {
-        try {
+class CityController extends Controller {
+
+    public function index(Request $request) {
+
+        $provinceId = $request->query('province_id');
+        if ($provinceId) {
+            $cities = City::where('province_id', $provinceId)->get();
+        } else {
             $cities = City::all();
-            return response()->json($cities);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error fetching cities', 'details' => $e->getMessage()], 500);
         }
+    
+        return response()->json($cities);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -37,8 +39,8 @@ class CityController extends Controller
         }
     }
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
+
         try {
             $city = City::findOrFail($id);
             return response()->json($city);
@@ -49,8 +51,8 @@ class CityController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
@@ -71,8 +73,8 @@ class CityController extends Controller
         }
     }
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
+        
         try {
             $city = City::findOrFail($id);
             $city->delete();

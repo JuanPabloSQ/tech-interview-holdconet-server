@@ -7,23 +7,22 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
-class StreetController extends Controller
-{
-    public function index()
-    {
-        try {
+class StreetController extends Controller {
+
+    public function index(Request $request) {
+
+        $cityId = $request->query('city_id');
+        if ($cityId) {
+            $streets = Street::where('city_id', $cityId)->get();
+        } else {
             $streets = Street::all();
-            return response()->json($streets, 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error fetching streets',
-                'details' => $e->getMessage()
-            ], 500);
         }
+    
+        return response()->json($streets);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -46,8 +45,8 @@ class StreetController extends Controller
         }
     }
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
+
         try {
             $street = Street::findOrFail($id);
             return response()->json($street, 200);
@@ -63,8 +62,8 @@ class StreetController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
@@ -92,8 +91,8 @@ class StreetController extends Controller
         }
     }
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
+        
         try {
             $street = Street::findOrFail($id);
             $street->delete();
