@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
-class RegionController extends Controller
-{
-    public function index()
-    {
+class RegionController extends Controller {
+
+    public function index() {
+        
         try {
             $regions = Region::all();
             return response()->json($regions);
@@ -19,8 +19,8 @@ class RegionController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -36,8 +36,8 @@ class RegionController extends Controller
         }
     }
 
-    public function show(string $id)
-    {
+    public function show(string $id) {
+
         try {
             $region = Region::findOrFail($id);
             return response()->json($region);
@@ -48,8 +48,8 @@ class RegionController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id) {
+
         try {
             $validatedData = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
@@ -69,8 +69,8 @@ class RegionController extends Controller
         }
     }
 
-    public function destroy(string $id)
-    {
+    public function destroy(string $id) {
+
         try {
             $region = Region::findOrFail($id);
             $region->delete();
