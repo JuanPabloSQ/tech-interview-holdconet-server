@@ -1,8 +1,8 @@
-# Prueba técnica holdconet - Juan Pablo Sepúlveda
+# Prueba técnica Holdconet - Juan Pablo Sepúlveda
 
 
 ## Descripción
-Esta API es el desarrollo de la prueba técnica entregada por holdconet. La API consiste en una base de datos de MySQL que proporciona datos de regiones, provincias, ciudades y calles, junto con la manipulación de estas por medios de GET, PUT, y DELETE.
+Esta API es el desarrollo de la prueba técnica entregada por Holdconet. La API consiste en una base de datos de MySQL que proporciona datos de regiones, provincias, ciudades y calles, junto con la manipulación de estas por medios de GET, PUT, y DELETE.
 
 La API está creada siguiendo la arquitectura MVC y configurada en su totalidad con PHP v8.3.10 + Laravel.
 

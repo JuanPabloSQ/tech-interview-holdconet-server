@@ -10,13 +10,44 @@ use Illuminate\Validation\ValidationException;
 class StreetController extends Controller {
 
     public function index(Request $request) {
-
         $cityId = $request->query('city_id');
-        if ($cityId) {
-            $streets = Street::where('city_id', $cityId)->get();
-        } else {
-            $streets = Street::all();
+        $provinceId = $request->query('province_id');
+        $regionId = $request->query('region_id');
+        $search = $request->query('search'); 
+    
+        $query = Street::query();
+    
+        if ($regionId) {
+            $query->whereHas('city.province.region', function($query) use ($regionId) {
+                $query->where('id', $regionId);
+            });
         }
+        if ($provinceId) {
+            $query->whereHas('city.province', function($query) use ($provinceId) {
+                $query->where('id', $provinceId);
+            });
+        }
+        if ($cityId) {
+            $query->where('city_id', $cityId);
+        }
+    
+        if ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%'); 
+        }
+    
+        $streets = $query->with('city.province.region')->get();
+    
+        $streets = $streets->map(function ($street) {
+            return [
+                'id' => $street->id,
+                'name' => $street->name,
+                'city' => $street->city->name,
+                'province' => $street->city->province->name,
+                'region' => $street->city->province->region->name,
+                'created_at' => $street->created_at,
+                'updated_at' => $street->updated_at,
+            ];
+        });
     
         return response()->json($streets);
     }
@@ -46,9 +77,20 @@ class StreetController extends Controller {
     }
 
     public function show(string $id) {
-
         try {
-            $street = Street::findOrFail($id);
+
+            $street = Street::with('city.province.region')->findOrFail($id);
+      
+            $street = [
+                'id' => $street->id,
+                'name' => $street->name,
+                'city' => $street->city->name,
+                'province' => $street->city->province->name,
+                'region' => $street->city->province->region->name,
+                'created_at' => $street->created_at,
+                'updated_at' => $street->updated_at,
+            ];
+    
             return response()->json($street, 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
