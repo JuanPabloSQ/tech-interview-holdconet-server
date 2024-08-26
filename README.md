@@ -13,7 +13,7 @@ Finalmente, se implementaron migrations y seeders para poder traspasar los datos
 
 ## Instrucciones de depliegue
 
-Asegurarse de tener PHP v8.3.10 para evitar problemas de compativilidad
+Asegurarse de tener PHP v8.3.10 para evitar problemas de compatibilidad
 1. **Requisitos de sistema**
     ```bash
     - PHP v8.3.10
