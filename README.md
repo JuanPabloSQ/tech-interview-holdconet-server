@@ -82,7 +82,10 @@ Asegurarse de tener PHP v8.3.10 para evitar problemas de compatibilidad
 
     - **Calles:**
     - GET /streets: Obtiene todas las calles.
+    - GET /streets?region_id=1: Obtiene las calles relacionadas con la region con ID 1.
+    - GET /streets?province_id=1: Obtiene las calles relacionadas con la provincia con ID 1.
     - GET /streets?city_id=1: Obtiene las calles relacionadas con la ciudad con ID 1.
+    - GET /streets?search=nombre: Obtiene las calles relacionadas con el nombre.
     - GET /streets/{id}: Obtiene la calle con el ID especificado.
     - POST /streets: Crea una nueva calle.
     - PUT /streets/{id}: Actualiza la calle con el ID especificado.
